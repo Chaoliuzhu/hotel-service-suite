@@ -4,6 +4,7 @@
 
 支持行李寄存全流程管理和遗留物品全流程管理，
 包括登记、取件/认领、打印标签、发送凭证、超期检查等操作。
+新增"随手拍"AI 拍照识别和"快递站模式"存取流程。
 
 用法：
     python main.py deposit --guest "张三" --room 1208 --phone 13800138000 ...
@@ -14,6 +15,10 @@
     python main.py voucher --number LG-20260623-001 --channel feishu
     python main.py check-overdue --type luggage --hours 24
     python main.py check-overdue --type lost-found --days 30
+    python main.py snap --photo /path/to/photo.jpg --mode luggage --guest "张三" --room 1208
+    python main.py pickup --scan "LG-20260623-001" --code 5864 --claimer "张三"
+    python main.py form-setup --type luggage
+    python main.py express-status
 """
 
 import argparse
@@ -24,6 +29,14 @@ import socket
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
+
+from workflow.quick_snap import (
+    QuickSnapProcessor,
+    SnapDepositRequest,
+    SnapLostFoundRequest,
+    create_bitable_form_fallback,
+)
+from workflow.express_mode import ExpressModeProcessor
 
 # ---------------------------------------------------------------------------
 # 常量配置
@@ -1052,6 +1065,149 @@ def cmd_check_overdue(args):
 
 
 # ---------------------------------------------------------------------------
+# 子命令：snap（随手拍 - AI 拍照识别）
+# ---------------------------------------------------------------------------
+
+def cmd_snap(args):
+    """执行随手拍 — AI 拍照识别并自动登记"""
+    photo = args.photo
+    mode = args.mode
+
+    if not os.path.isfile(photo):
+        print(f"[错误] 图片文件不存在: {photo}", file=sys.stderr)
+        sys.exit(1)
+
+    if mode not in ("luggage", "lost_found"):
+        print(f"[错误] mode 参数无效: {mode}，可选值: luggage, lost_found", file=sys.stderr)
+        sys.exit(1)
+
+    processor = ExpressModeProcessor()
+
+    date_str = today_str()
+    operator = args.operator or "随手拍CLI"
+
+    print(f"[信息] 随手拍模式: {mode}")
+    print(f"[信息] 照片: {photo}")
+    print(f"[信息] AI 正在识别...")
+
+    if mode == "luggage":
+        result = processor.deposit_item(
+            photo=photo,
+            context="luggage",
+            operator=operator,
+            guest_name=args.guest or "",
+            room=str(args.room) if args.room else "",
+            phone=args.phone or "",
+            item_count=args.items or 1,
+            storage_location=args.location or "一楼行李房",
+        )
+    else:
+        result = processor.deposit_item(
+            photo=photo,
+            context="lost_found",
+            operator=operator,
+            finder=args.finder or "",
+            found_location=args.found_at or "",
+            room=str(args.room) if args.room else "",
+            guest_name=args.guest or "",
+            guest_phone=args.phone or "",
+        )
+
+    if result.success:
+        print(result.summary())
+        print(f"[成功] 随手拍登记完成!")
+        if result.qr_path:
+            print(f"[提示] 二维码已生成: {result.qr_path}")
+    else:
+        print(f"[失败] {result.error}", file=sys.stderr)
+        sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# 子命令：pickup（快递站模式取件）
+# ---------------------------------------------------------------------------
+
+def cmd_pickup(args):
+    """执行快递站模式取件 — 扫码/报号 + 验证码"""
+    scan = args.scan
+    code = args.code or ""
+    claimer = args.claimer or ""
+    operator = args.operator or "快递站CLI"
+
+    processor = ExpressModeProcessor()
+
+    print(f"[信息] 快递站取件: {scan}")
+    if code:
+        print(f"[信息] 验证码: {code}")
+
+    result = processor.pickup_item(
+        scan_code_or_number=scan,
+        verification_code=code,
+        claimer=claimer,
+        operator=operator,
+    )
+
+    print(result.summary())
+
+    if not result.success:
+        sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# 子命令：form-setup（创建多维表格收集表单）
+# ---------------------------------------------------------------------------
+
+def cmd_form_setup(args):
+    """创建多维表格收集表单作为兜底入口"""
+    form_type = args.type
+
+    print(f"[信息] 创建收集表单: {form_type}")
+
+    config = {}
+    if form_type == "luggage":
+        config["create_luggage"] = True
+        config["create_lost_found"] = False
+    elif form_type == "lost-found":
+        config["create_luggage"] = False
+        config["create_lost_found"] = True
+    elif form_type == "all":
+        config["create_luggage"] = True
+        config["create_lost_found"] = True
+    else:
+        print(f"[错误] type 参数无效: {form_type}，可选值: luggage, lost-found, all", file=sys.stderr)
+        sys.exit(1)
+
+    result = create_bitable_form_fallback(config)
+
+    print(f"{'=' * 50}")
+    print(f"  收集表单创建结果")
+    print(f"  {'=' * 46}")
+
+    if result.get("luggage_form_url"):
+        print(f"  行李寄存表单: {result['luggage_form_url']}")
+    if result.get("lost_found_form_url"):
+        print(f"  遗留物品表单: {result['lost_found_form_url']}")
+
+    print(f"  状态: {result.get('status', 'unknown')}")
+    print(f"{'=' * 50}")
+    print(f"[成功] 表单创建完成! 可将链接放入BOT菜单或群公告中。")
+
+
+# ---------------------------------------------------------------------------
+# 子命令：express-status（快递站模式状态概览）
+# ---------------------------------------------------------------------------
+
+def cmd_express_status(args):
+    """显示快递站模式当日状态概览"""
+    processor = ExpressModeProcessor()
+
+    print("[信息] 正在获取当日状态概览...")
+
+    status = processor.get_daily_status()
+    print(status.summary())
+
+
+# ---------------------------------------------------------------------------
 # CLI 入口
 # ---------------------------------------------------------------------------
 
@@ -1088,6 +1244,23 @@ def build_parser() -> argparse.ArgumentParser:
   # 超期检查
   python main.py check-overdue --type luggage --hours 24
   python main.py check-overdue --type lost-found --days 30
+
+  # 随手拍 — AI 拍照识别
+  python main.py snap --photo /path/to/photo.jpg --mode luggage \\
+      --guest "张三" --room 1208 --phone 13800138000
+  python main.py snap --photo /path/to/photo.jpg --mode lost_found \\
+      --finder "客房服务员小王" --room 302
+
+  # 快递站模式取件
+  python main.py pickup --scan "LG-20260623-001" --code 5864 --claimer "张三"
+  python main.py pickup --scan "LF-20260623-001" --claimer "李四"
+
+  # 创建多维表格收集表单
+  python main.py form-setup --type luggage
+  python main.py form-setup --type all
+
+  # 快递站模式状态概览
+  python main.py express-status
 """,
     )
 
@@ -1152,6 +1325,35 @@ def build_parser() -> argparse.ArgumentParser:
     p_overdue.add_argument("--hours", type=int, default=None, help="行李超期小时数 (24/48/72)")
     p_overdue.add_argument("--days", type=int, default=None, help="遗留物品超期天数 (30/60/90)")
 
+    # --- snap (随手拍) ---
+    p_snap = subparsers.add_parser("snap", help="随手拍 - AI拍照识别并自动登记")
+    p_snap.add_argument("--photo", required=True, help="照片文件路径")
+    p_snap.add_argument("--mode", required=True, choices=["luggage", "lost_found"],
+                        help="模式: luggage (行李寄存) / lost_found (遗留物品)")
+    p_snap.add_argument("--guest", default=None, help="宾客姓名")
+    p_snap.add_argument("--room", type=int, default=None, help="房号")
+    p_snap.add_argument("--phone", default=None, help="联系方式/宾客电话")
+    p_snap.add_argument("--items", type=int, default=1, help="寄存件数 (仅 luggage)")
+    p_snap.add_argument("--location", default=None, help="寄存/保管位置")
+    p_snap.add_argument("--finder", default=None, help="发现人 (仅 lost_found)")
+    p_snap.add_argument("--found-at", default=None, help="发现地点 (仅 lost_found)")
+    p_snap.add_argument("--operator", default=None, help="经手人")
+
+    # --- pickup (快递站取件) ---
+    p_pickup = subparsers.add_parser("pickup", help="快递站模式取件 - 扫码/报号+验证码")
+    p_pickup.add_argument("--scan", required=True, help="扫码内容或编号 (LG-... 或 LF-...)")
+    p_pickup.add_argument("--code", default=None, help="取件验证码 (仅行李)")
+    p_pickup.add_argument("--claimer", default=None, help="领取人姓名")
+    p_pickup.add_argument("--operator", default=None, help="经办人")
+
+    # --- form-setup (创建收集表单) ---
+    p_form = subparsers.add_parser("form-setup", help="创建多维表格收集表单 (兜底入口)")
+    p_form.add_argument("--type", required=True, choices=["luggage", "lost-found", "all"],
+                        help="表单类型: luggage / lost-found / all")
+
+    # --- express-status (快递站状态概览) ---
+    subparsers.add_parser("express-status", help="快递站模式当日状态概览")
+
     return parser
 
 
@@ -1171,6 +1373,10 @@ def main():
         "print": cmd_print_label,
         "voucher": cmd_voucher,
         "check-overdue": cmd_check_overdue,
+        "snap": cmd_snap,
+        "pickup": cmd_pickup,
+        "form-setup": cmd_form_setup,
+        "express-status": cmd_express_status,
     }
 
     handler = command_map.get(args.command)
