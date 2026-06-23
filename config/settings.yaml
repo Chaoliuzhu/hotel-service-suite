@@ -23,9 +23,13 @@ sms:
   sign_name: ''
   template_code: ''
 test:
-  luggage_base_token: Ncr2bx3dBan7fisP0G2cun9wn2L
-  luggage_table_id: tblrLvDXd4eXawq9
-  note: BOT-created test base with full permissions
+  lost_found_base_token: Xr5zbq3rXako5JsoP2fc5RFInHg
+  lost_found_group: oc_eb810f6e32c37dd4cfda228e5712dc01
+  lost_found_table_id: tblDitL8stj35l4L
+  luggage_base_token: XsQwbPfzLahATEsBY9Zc39FXnzy
+  luggage_group: oc_26983403a720859d821ef13e2d052d32
+  luggage_table_id: tblYqqMvQhZtytlM
+  note: 新BOT(cli_a96e3bb320385cbb)创建,全权限,已跑通完整存取流程
 wechat:
   app_id: ''
   app_secret: ''
