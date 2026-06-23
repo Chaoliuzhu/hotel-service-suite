@@ -6,8 +6,10 @@ bitable:
     app_token: Atj6bOVJtaDGSjspKDqcx3Jqnfd
     table_id: tblMPvX3VKodb80I
 feishu_bot:
-  app_id: ''
-  app_secret: ''
+  app_id: cli_a96e3bb320385cbb
+  name: hotel-service-bot
+  note: 已配置为lark-cli currentApp
+  purpose: 酒店行李寄存+客遗管理专用BOT
 printer:
   ip: 192.168.1.100
   label_height_mm: 50
