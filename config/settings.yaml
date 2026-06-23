@@ -16,6 +16,17 @@ printer:
   label_width_mm: 75
   port: 9100
   protocol: tspl
+printer_registry:
+  base_token: XsQwbPfzLahATEsBY9Zc39FXnzy
+  purpose: 多打印机路由注册表:名称/位置/IP/端口/协议/状态/负责区域
+  registered_printers:
+  - area: 一楼大堂-行李寄存
+    ip: 192.168.1.101
+    name: 一楼前台标签机
+  - area: 三楼客房部-客遗管理
+    ip: 192.168.1.102
+    name: 三楼客房部标签机
+  table_id: tbloeyuxQtSLAV27
 sms:
   api_key: ''
   api_secret: ''
