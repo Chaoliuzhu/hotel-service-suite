@@ -1,0 +1,154 @@
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🔍 遗留物品凭证"
+    },
+    "template": "red"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**天津瑞湾开元名都酒店** · 遗留物品登记"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**案件编号：** {{ case_number }}\n**当前状态：** {{ status }}"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**宾客姓名**\n{{ guest_name }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**物品类别**\n{{ category }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**发现日期**\n{{ discovery_date }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**发现地点**\n{{ discovery_location }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**拾获人**\n{{ finder }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**重要物品**\n{{ is_important_text }}"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**物品描述**\n{{ item_description }}"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**联系方式**\n宾客电话：{{ guest_phone }}\n酒店前台：022-XXXX-XXXX"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "📦 遗留物品自发现之日起保留 90 天"
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "📮 领取时请携带有效身份证件 | 邮寄费由宾客承担（顺丰到付）"
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "查看详情"
+          },
+          "type": "primary",
+          "url": "{{ detail_url }}"
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "联系前台"
+          },
+          "type": "default",
+          "url": "{{ contact_url }}"
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "天津瑞湾开元名都酒店 | 前台：022-XXXX-XXXX | 24小时服务"
+        }
+      ]
+    }
+  ]
+}

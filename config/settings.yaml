@@ -1,0 +1,58 @@
+# =============================================================================
+# Hotel Service Suite - Settings
+# =============================================================================
+# This file contains all configuration values for the hotel service modules.
+# Sensitive values (API secrets, passwords) should be provided via environment
+# variables in production deployments.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Feishu Bitable - Table Tokens
+# -----------------------------------------------------------------------------
+bitable:
+  # Lost & Found tracking table
+  lost_found:
+    app_token: "JJpTbxNJgaVojJsfUItcmvq5nqf"
+    table_id: "tblgcBcPR9P8fina"
+
+  # Luggage storage tracking table
+  luggage:
+    app_token: "Atj6bOVJtaDGSjspKDqcx3Jqnfd"
+    table_id: "tblMPvX3VKodb80I"
+
+# -----------------------------------------------------------------------------
+# Thermal Label Printer
+# -----------------------------------------------------------------------------
+printer:
+  ip: "192.168.1.100"
+  port: 9100
+  protocol: "tspl"          # tspl | zpl
+  label_width_mm: 75
+  label_height_mm: 50
+
+# -----------------------------------------------------------------------------
+# Feishu Bot (Lark)
+# -----------------------------------------------------------------------------
+feishu_bot:
+  app_id: ""                # Fill in your Feishu bot app_id
+  app_secret: ""            # Fill in your Feishu bot app_secret
+
+# -----------------------------------------------------------------------------
+# SMS Gateway (Placeholder)
+# -----------------------------------------------------------------------------
+# Supported providers: aliyun, tencent, twilio (future)
+sms:
+  provider: ""
+  api_key: ""
+  api_secret: ""
+  sign_name: ""
+  template_code: ""
+
+# -----------------------------------------------------------------------------
+# WeChat (Placeholder)
+# -----------------------------------------------------------------------------
+wechat:
+  app_id: ""
+  app_secret: ""
+  token: ""
+  encoding_aes_key: ""

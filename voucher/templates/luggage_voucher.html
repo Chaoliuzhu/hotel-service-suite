@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行李寄存凭证 — 天津瑞湾开元名都酒店</title>
+<style>
+  :root {
+    --brand-gold: #C8A86E;
+    --brand-dark: #2C2C2C;
+    --brand-light: #F5F0E8;
+    --border-color: #D4C5A0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #f0f0f0;
+    padding: 20px;
+  }
+  .voucher {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border: 2px solid var(--brand-gold);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .header {
+    background: linear-gradient(135deg, var(--brand-dark), #1a1a2e);
+    color: #fff;
+    padding: 24px 30px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--brand-gold);
+    margin-bottom: 4px;
+  }
+  .header .hotel-name {
+    font-size: 13px;
+    color: #bbb;
+    letter-spacing: 2px;
+  }
+  .header .hotel-name-en {
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .body { padding: 24px 30px; }
+  .deposit-number {
+    text-align: center;
+    padding: 16px;
+    background: var(--brand-light);
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px dashed var(--border-color);
+  }
+  .deposit-number label {
+    font-size: 12px;
+    color: #666;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .deposit-number .number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    letter-spacing: 3px;
+    font-family: "Courier New", monospace;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    margin-bottom: 20px;
+  }
+  .info-item { display: flex; flex-direction: column; }
+  .info-item label {
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .info-item span {
+    font-size: 14px;
+    color: var(--brand-dark);
+    font-weight: 500;
+  }
+  .info-item.full { grid-column: 1 / -1; }
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--border-color);
+    margin: 20px 0;
+  }
+  .codes {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 16px 0;
+  }
+  .code-block { text-align: center; }
+  .code-block .code-label {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .code-block .barcode {
+    font-family: "Libre Barcode 39", "Courier New", monospace;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--brand-dark);
+    line-height: 1;
+  }
+  .code-block .barcode-text {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+    font-family: monospace;
+  }
+  .code-block .qr-placeholder {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--brand-gold);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #999;
+    background: #fafafa;
+    margin: 0 auto;
+  }
+  .footer {
+    background: var(--brand-light);
+    padding: 16px 30px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+  }
+  .footer p {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.6;
+  }
+  .footer .hotel-info { font-size: 12px; color: #666; margin-bottom: 4px; }
+  .notice {
+    background: #FFF9ED;
+    border: 1px solid #F0D88A;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  .notice h4 {
+    font-size: 12px;
+    color: #B8860B;
+    margin-bottom: 6px;
+  }
+  .notice p {
+    font-size: 11px;
+    color: #8B7355;
+    line-height: 1.6;
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .voucher { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="voucher">
+  <!-- 头部 -->
+  <div class="header">
+    <h1>行李寄存凭证</h1>
+    <div class="hotel-name">天津瑞湾开元名都酒店</div>
+    <div class="hotel-name-en">New Century Grand Hotel Tianjin Ruiwan</div>
+  </div>
+
+  <div class="body">
+    <!-- 寄存编号 -->
+    <div class="deposit-number">
+      <label>寄存编号 DEPOSIT NO.</label>
+      <div class="number">{{ deposit_number }}</div>
+    </div>
+
+    <!-- 宾客信息 -->
+    <div class="info-grid">
+      <div class="info-item">
+        <label>宾客姓名</label>
+        <span>{{ guest_name }}</span>
+      </div>
+      <div class="info-item">
+        <label>房间号</label>
+        <span>{{ room }}</span>
+      </div>
+      <div class="info-item">
+        <label>寄存件数</label>
+        <span>{{ item_count }} 件</span>
+      </div>
+      <div class="info-item">
+        <label>寄存类型</label>
+        <span>{{ storage_type }}</span>
+      </div>
+      <div class="info-item">
+        <label>寄存时间</label>
+        <span>{{ deposit_time }}</span>
+      </div>
+      <div class="info-item">
+        <label>预计提取时间</label>
+        <span>{{ expected_pickup }}</span>
+      </div>
+      <div class="info-item full">
+        <label>寄存位置</label>
+        <span>{{ storage_location }}</span>
+      </div>
+      <div class="info-item full">
+        <label>物品描述</label>
+        <span>{{ item_desc }}</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- 条码与二维码 -->
+    <div class="codes">
+      <div class="code-block">
+        <div class="code-label">条形码</div>
+        <div class="barcode">||||| |||| |||||</div>
+        <div class="barcode-text">{{ barcode }}</div>
+      </div>
+      <div class="code-block">
+        <div class="code-label">验证码</div>
+        <div class="number" style="font-size:22px; color: var(--brand-gold);">{{ verification_code }}</div>
+      </div>
+      <div class="code-block">
+        <div class="code-label">二维码</div>
+        <div class="qr-placeholder">
+          <img src="{{ qr_code_data_uri }}" alt="QR Code" style="width:100%;height:100%;" onerror="this.style.display='none';this.parentNode.innerHTML='QR Code'">
+        </div>
+      </div>
+    </div>
+
+    <!-- 注意事项 -->
+    <div class="notice">
+      <h4>温馨提示</h4>
+      <p>
+        1. 请妥善保管此凭证，提取行李时需出示验证码。<br>
+        2. 超过预计提取时间 24 小时未提取，酒店将电话联系您确认。<br>
+        3. 如凭证遗失，请携带有效身份证件至前台办理。<br>
+        4. 贵重物品请随身携带，酒店不承担寄存物品的贵重损失。
+      </p>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <p class="hotel-info">天津瑞湾开元名都酒店 | 天津市滨海新区</p>
+    <p>前台电话：022-XXXX-XXXX | 24小时服务</p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🧳 行李寄存凭证"
+    },
+    "template": "blue"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**天津瑞湾开元名都酒店** · 行李寄存服务"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**寄存编号：** {{ deposit_number }}\n**验证码：** {{ verification_code }}"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**宾客姓名**\n{{ guest_name }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**房间号**\n{{ room }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**寄存件数**\n{{ item_count }} 件"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**寄存类型**\n{{ storage_type }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**寄存时间**\n{{ deposit_time }}"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**预计提取**\n{{ expected_pickup }}"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**寄存位置：** {{ storage_location }}\n**物品描述：** {{ item_desc }}"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "📋 请妥善保管此凭证，提取时需出示验证码"
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "⏰ 超过预计提取时间 24 小时将电话联系确认"
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "查看详情"
+          },
+          "type": "primary",
+          "url": "{{ detail_url }}"
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "联系前台"
+          },
+          "type": "default",
+          "url": "{{ contact_url }}"
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "天津瑞湾开元名都酒店 | 前台：022-XXXX-XXXX | 24小时服务"
+        }
+      ]
+    }
+  ]
+}

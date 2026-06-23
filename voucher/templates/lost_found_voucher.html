@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>遗留物品凭证 — 天津瑞湾开元名都酒店</title>
+<style>
+  :root {
+    --brand-gold: #C8A86E;
+    --brand-dark: #2C2C2C;
+    --brand-light: #F5F0E8;
+    --border-color: #D4C5A0;
+    --status-pending: #E6A23C;
+    --status-contacted: #409EFF;
+    --status-claimed: #67C23A;
+    --status-mailed: #9B59B6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #f0f0f0;
+    padding: 20px;
+  }
+  .voucher {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border: 2px solid var(--brand-gold);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .header {
+    background: linear-gradient(135deg, #8B0000, #6B0000);
+    color: #fff;
+    padding: 24px 30px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--brand-gold);
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: #ddd;
+    letter-spacing: 2px;
+  }
+  .header .hotel-name-en {
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .body { padding: 24px 30px; }
+  .case-number {
+    text-align: center;
+    padding: 16px;
+    background: #FFF5F5;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px dashed #E8A0A0;
+  }
+  .case-number label {
+    font-size: 12px;
+    color: #999;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .case-number .number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #8B0000;
+    letter-spacing: 2px;
+    font-family: "Courier New", monospace;
+  }
+  .status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 8px;
+  }
+  .status-badge.待处理 { background: var(--status-pending); }
+  .status-badge.已联系宾客 { background: var(--status-contacted); }
+  .status-badge.已认领 { background: var(--status-claimed); }
+  .status-badge.已邮寄 { background: var(--status-mailed); }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    margin-bottom: 20px;
+  }
+  .info-item { display: flex; flex-direction: column; }
+  .info-item label {
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .info-item span {
+    font-size: 14px;
+    color: var(--brand-dark);
+    font-weight: 500;
+  }
+  .info-item.full { grid-column: 1 / -1; }
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--border-color);
+    margin: 20px 0;
+  }
+  .item-detail {
+    background: var(--brand-light);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+  }
+  .item-detail h3 {
+    font-size: 13px;
+    color: #8B7355;
+    margin-bottom: 8px;
+  }
+  .item-detail p {
+    font-size: 14px;
+    color: var(--brand-dark);
+    line-height: 1.6;
+  }
+  .contact-section {
+    background: #F8F9FA;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .contact-section h3 {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 6px;
+  }
+  .contact-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .contact-row .label { color: #999; }
+  .contact-row .value { color: var(--brand-dark); font-weight: 500; }
+  .notice {
+    background: #FFF9ED;
+    border: 1px solid #F0D88A;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  .notice h4 {
+    font-size: 12px;
+    color: #B8860B;
+    margin-bottom: 6px;
+  }
+  .notice p {
+    font-size: 11px;
+    color: #8B7355;
+    line-height: 1.6;
+  }
+  .footer {
+    background: var(--brand-light);
+    padding: 16px 30px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+  }
+  .footer p {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.6;
+  }
+  .footer .hotel-info { font-size: 12px; color: #666; margin-bottom: 4px; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .voucher { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="voucher">
+  <!-- 头部 -->
+  <div class="header">
+    <h1>遗留物品凭证</h1>
+    <div class="subtitle">LOST &amp; FOUND VOUCHER</div>
+    <div class="hotel-name-en">New Century Grand Hotel Tianjin Ruiwan</div>
+  </div>
+
+  <div class="body">
+    <!-- 案件编号 -->
+    <div class="case-number">
+      <label>案件编号 CASE NO.</label>
+      <div class="number">{{ case_number }}</div>
+      <span class="status-badge {{ status }}">{{ status }}</span>
+    </div>
+
+    <!-- 宾客信息 -->
+    <div class="info-grid">
+      <div class="info-item">
+        <label>宾客姓名</label>
+        <span>{{ guest_name }}</span>
+      </div>
+      <div class="info-item">
+        <label>物品类别</label>
+        <span>{{ category }}</span>
+      </div>
+      <div class="info-item">
+        <label>发现日期</label>
+        <span>{{ discovery_date }}</span>
+      </div>
+      <div class="info-item">
+        <label>发现地点</label>
+        <span>{{ discovery_location }}</span>
+      </div>
+      <div class="info-item">
+        <label>拾获人</label>
+        <span>{{ finder }}</span>
+      </div>
+      <div class="info-item">
+        <label>重要物品</label>
+        <span>{{ "是 — 已存入保险箱" if is_important else "否" }}</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- 物品详情 -->
+    <div class="item-detail">
+      <h3>物品描述</h3>
+      <p>{{ item_description }}</p>
+    </div>
+
+    <!-- 联系方式 -->
+    <div class="contact-section">
+      <h3>联系方式</h3>
+      <div class="contact-row">
+        <span class="label">宾客电话</span>
+        <span class="value">{{ guest_phone }}</span>
+      </div>
+      <div class="contact-row">
+        <span class="label">酒店前台</span>
+        <span class="value">022-XXXX-XXXX</span>
+      </div>
+    </div>
+
+    <!-- 邮寄信息（如有） -->
+    {% if courier_company %}
+    <div class="contact-section">
+      <h3>邮寄信息</h3>
+      <div class="contact-row">
+        <span class="label">快递公司</span>
+        <span class="value">{{ courier_company }}</span>
+      </div>
+      <div class="contact-row">
+        <span class="label">运单号</span>
+        <span class="value">{{ tracking_number }}</span>
+      </div>
+      <div class="contact-row">
+        <span class="label">邮寄地址</span>
+        <span class="value">{{ mailing_address }}</span>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- 注意事项 -->
+    <div class="notice">
+      <h4>温馨提示</h4>
+      <p>
+        1. 遗留物品自发现之日起保留 90 天。<br>
+        2. 30 天未联系将发送提醒通知，60 天未认领将发布公告。<br>
+        3. 领取时请携带有效身份证件及本凭证。<br>
+        4. 如需邮寄，邮费由宾客承担（顺丰到付）。
+      </p>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <p class="hotel-info">天津瑞湾开元名都酒店 | 天津市滨海新区</p>
+    <p>前台电话：022-XXXX-XXXX | 24小时服务</p>
+  </div>
+</div>
+</body>
+</html>
