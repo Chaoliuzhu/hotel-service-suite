@@ -261,6 +261,117 @@ python main.py check-overdue \
 | 条码类型 | Code128 | Code128 |
 | 通信方式 | TCP/IP 端口 9100 | TCP/IP 端口 9100 |
 
+## 市场销售技能 (Market Sales Skills)
+
+> 2026-06-25 新增：酒店客户开发工单系统 + 销售外拓追踪设计
+
+### hotel-client-dev (客户开发工单生成器) v1.1
+
+**SKILL 文件**: [skills/hotel-client-dev/SKILL.md](skills/hotel-client-dev/SKILL.md)
+
+酒店客户开发全流程AI赋能工具。从企查查API获取企业数据→AI评分分级(P0-P3)→生成7模块开发工单→智能派单→飞书任务工单。
+
+**三大开发维度**：
+- **存量深挖**: 央国企生态链穿透（中海油系/中远海运系/中交系）
+- **会务市场**: 会务公司签约→批量甲方客户
+- **增量新拓**: 企查查全量扫描→AI评分→精准出击
+
+**四大行业拓展维度** (v1.1新增):
+- **银行/金融**: 滨海新区银行分支机构、证券、保险、基金
+- **学校/医院**: 高校学术会议、医院专家来访、医药代表差旅
+- **IT/科技**: 技术沙龙、驻场开发、AI智能酒店体验
+- **新质生产力/央国企研究院**: 研发经费充裕、学术会议密集
+
+**地域可达性修正**: 解决"总部在市区vs分支在滨海"的评分偏差
+
+**国际方法论融合**: MEDDPICC(8维销售认证) + SPIN(提问序列) + Challenger Sale(教学式销售)
+
+### hotel-outreach-tracker (销售外拓追踪) v1.0
+
+**SKILL 文件**: [skills/hotel-outreach-tracker/SKILL.md](skills/hotel-outreach-tracker/SKILL.md)
+
+销售外拓每日追踪系统设计文档。替代"管人型"外拓台账，升级为"AI赋能型"外拓系统。
+
+## 文档 (Documentation)
+
+| 文档 | 说明 |
+|------|------|
+| [P0客户开发工单](docs/P0客户开发工单.md) | 4家P0核心客户详细开发工单（渤海银行/天津港/中海油服/中远海运） |
+| [SKILL复盘与市场研究](docs/skill_review_and_market_research.md) | SKILL工厂复盘 + 国际销售方法论 + MICE框架 |
+
+## OpenClaw 一键部署
+
+### 方式一：ClawHub 安装（推荐）
+
+```bash
+clawhub install hotel-client-dev
+clawhub install hotel-outreach-tracker
+clawhub install hotel-luggage-storage
+clawhub install hotel-lost-and-found
+```
+
+### 方式二：手动部署
+
+```bash
+git clone https://github.com/Chaoliuzhu/hotel-service-suite.git
+cp -r hotel-service-suite/skills/hotel-client-dev ~/.openclaw/workspace/skills/
+openclaw reload
+```
+
+### 方式三：QoderWork / WorkBuddy
+
+```bash
+# QoderWork
+cp -r skills/hotel-client-dev ~/.qoderwork/skills/
+
+# WorkBuddy
+cp -r skills/hotel-client-dev ~/.workbuddy/skills/
+```
+
+## 依赖环境
+
+| 依赖 | 用途 | 安装 |
+|------|------|------|
+| lark-cli | 飞书多维表格/消息/任务 | `npm install -g @anthropic/lark-cli` |
+| qcc-company MCP | 企查查API企业数据 | MCP配置 |
+| Python 3.9+ | 数据处理/脚本 | `brew install python` |
+| TSPL打印机 | 热敏标签打印 | TCP/IP 9100端口 |
+
+## 飞书多维表格 Base
+
+| 表格 | 用途 | 链接 |
+|------|------|------|
+| 生产外拓管理 | 客户拜访/销售指标/客户档案/潜在客户池/竞品监测/询价管理 | [打开](https://delonix.feishu.cn/base/SPhwbqRSVaLLKGsDgfOccBISnad) |
+| 共享池 | 技能工具库/经验思路库/任务看板 | [打开](https://delonix.feishu.cn/base/ZJ8obBGrSaO9rjsXPvhc1TdYngd) |
+| 询价管理 | 询价跟踪/AI赋能字段/转化漏斗 | [打开](https://delonix.feishu.cn/base/Tkx8bX0Z6antJJs12fycVoAZnUd) |
+
+## 版本历史
+
+- v1.1 (2026-06-25): hotel-client-dev 新增行业维度+地域可达性+MEDDPICC融合
+- v1.0 (2026-06-24): hotel-client-dev 初版 + hotel-outreach-tracker 设计文档
+- v0.9 (2026-06-23): hotel-luggage-storage v2.0 + hotel-lost-and-found v2.0
+
+## 目录结构
+
+```
+hotel-service-suite/
+├── main.py                              # CLI 统一入口
+├── requirements.txt                     # Python 依赖
+├── README.md                            # 项目文档
+├── docs/
+│   ├── P0客户开发工单.md                  # P0客户详细开发工单
+│   └── skill_review_and_market_research.md # SKILL复盘与市场研究
+└── skills/
+    ├── hotel-client-dev/
+    │   └── SKILL.md                     # 客户开发工单生成器 v1.1
+    ├── hotel-outreach-tracker/
+    │   └── SKILL.md                     # 销售外拓追踪 v1.0
+    ├── hotel-luggage-storage/
+    │   └── SKILL.md                     # 行李寄存管理 v2.0
+    └── hotel-lost-and-found/
+        └── SKILL.md                     # 遗留物品管理 v2.0
+```
+
 ## 许可证
 
-本项目为酒店内部使用，版权所有。
+本项目为德胧集团酒店内部使用及AI龙虾军团协作研发。
